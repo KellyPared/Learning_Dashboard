@@ -2,6 +2,8 @@ from flask import Flask, render_template, redirect, jsonify
 import plotly.graph_objs as go
 import json
 from pymongo import MongoClient
+import folium
+import pandas as pd
 
 app = Flask(__name__)
 
@@ -45,6 +47,16 @@ def index():
 
     # Render the template with the graph and dropdown menu
     return render_template('index.html', graph_data=json.dumps(graph_data), dropdown_menu=dropdown_menu)
+
+
+def map_page():
+    # Get data and create map
+    schools_data = get_schools_data()
+    map_html = get_map(schools_data)
+
+    # Render the template with the map
+    return render_template('map.html', map_html=map_html)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
