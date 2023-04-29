@@ -2,41 +2,73 @@
 <html>
 <head>
     <title>Student Dashboard</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
 
-    <h1>Student Dashboard</h1>
+    <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Student Dashboard</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('schools_map') }}">Schools Map</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-    <div>
-        <p>Select a student:</p>
-        <select id="student-dropdown">
-            {% for item in dropdown_menu %}
-                <option value="{{ item['value'] }}">{{ item['label'] }}</option>
-            {% endfor %}
-        </select>
+    <div class="container mt-5">
+        <h1>Student Dashboard</h1>
+
+        <div class="row mt-5">
+            <div class="col-md-6">
+                <div>
+                    <p>Select a student:</p>
+                    <select id="student-dropdown">
+                        {% for item in dropdown_menu %}
+                            <option value="{{ item['value'] }}">{{ item['label'] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div id="student-info"></div>
+            </div>
+
+            <div class="col-md-6">
+                <div id="graph"></div>
+            </div>
+        </div>
     </div>
 
-    <div id="graph">
-        <script>
-            var data = {{ graph_data | safe }};
+    <script>
+        var data = {{ graph_data | safe }};
 
-            Plotly.newPlot('graph', data);
+        Plotly.newPlot('graph', data);
             
-            var dropdown = document.getElementById("student-dropdown");
+        var dropdown = document.getElementById("student-dropdown");
 
-            dropdown.addEventListener("change", function() {
-                var index = dropdown.selectedIndex;
-                var selectedStudent = dropdown.options[index].value;
-                var studentGPA = {{ graph_data | tojson | safe }}[index].y;
-                var studentInfo = "Name: " + selectedStudent + "<br> GPA: " + studentGPA;
+        dropdown.addEventListener("change", function() {
+            var index = dropdown.selectedIndex;
+            var selectedStudent = dropdown.options[index].value;
+            var studentGPA = {{ graph_data | tojson | safe }}[index].y;
+            var studentInfo = "Name: " + selectedStudent + "<br> GPA: " + studentGPA;
 
-                document.getElementById("student-info").innerHTML = studentInfo;
-            });
-        </script>
-    </div>
+            document.getElementById("student-info").innerHTML = studentInfo;
+        });
+    </script>
 
-    <div id="student-info"></div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 </body>
 </html>

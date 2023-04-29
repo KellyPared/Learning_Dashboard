@@ -1,5 +1,5 @@
 from flask import Flask, render_template, redirect, jsonify
-from unesco_data import get_schools_data, get_map
+from unesco_data import data, schools
 
 import plotly.graph_objs as go
 import json
@@ -53,7 +53,7 @@ def index():
 @app.route('/schools_map')
 def schools_map():
     # Get data and create map
-    data = get_schools_data()
+    data = data
     # map_html = get_map(schools_data)
     # Create a map of schools
     map_data = {
