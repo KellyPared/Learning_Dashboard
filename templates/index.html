@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head>
+    <title>Student Dashboard</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+
+    <h1>Student Dashboard</h1>
+
+    <div>
+        <p>Select a student:</p>
+        <select id="student-dropdown">
+            {% for item in dropdown_menu %}
+                <option value="{{ item['value'] }}">{{ item['label'] }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div id="graph">
+        <script>
+            var data = {{ graph_data | safe }};
+
+            Plotly.newPlot('graph', data);
+            
+            var dropdown = document.getElementById("student-dropdown");
+
+            dropdown.addEventListener("change", function() {
+                var index = dropdown.selectedIndex;
+                var selectedStudent = dropdown.options[index].value;
+                var studentGPA = {{ graph_data | tojson | safe }}[index].y;
+                var studentInfo = "Name: " + selectedStudent + "<br> GPA: " + studentGPA;
+
+                document.getElementById("student-info").innerHTML = studentInfo;
+            });
+        </script>
+    </div>
+
+    <div id="student-info"></div>
+
+</body>
+</html>
