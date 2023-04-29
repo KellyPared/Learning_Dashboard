@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+<head>
+    <title>Schools Map</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+
+    <h1>Schools Map</h1>
+
+    <div id="map"></div>
+
+    <script>
+        var mapData = {{ map_data | safe }};
+
+        // Set up the map
+        var myMap = L.map('map').setView([mapData[0].latitude, mapData[0].longitude], 10);
+
+        // Add tile layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+                '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+                'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            id: 'mapbox/streets-v11',
+            tileSize: 512,
+            zoomOffset: -1
+        }).addTo(myMap);
+
+        // Add markers for each school
+        mapData.forEach(function(school) {
+            L.marker([school.latitude, school.longitude]).addTo(myMap)
+            .bindPopup(school.name + "<br>" + school.country);
+        });
+    </script>
+
+</body>
+</html>

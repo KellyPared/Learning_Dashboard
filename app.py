@@ -1,4 +1,6 @@
 from flask import Flask, render_template, redirect, jsonify
+from unesco_data import get_schools_data, get_map
+
 import plotly.graph_objs as go
 import json
 from pymongo import MongoClient
@@ -48,14 +50,34 @@ def index():
     # Render the template with the graph and dropdown menu
     return render_template('index.html', graph_data=json.dumps(graph_data), dropdown_menu=dropdown_menu)
 
-
-def map_page():
+@app.route('/schools_map')
+def schools_map():
     # Get data and create map
-    schools_data = get_schools_data()
-    map_html = get_map(schools_data)
+    data = get_schools_data()
+    # map_html = get_map(schools_data)
+    # Create a map of schools
+    map_data = {
+            'type': 'scattergeo',
+        'locationmode': 'ISO-3',
+        'lat': data['lat'],
+        'lon': data['lon'],
+        'text': data['name'],
+        'mode': 'markers',
+        'marker': {
+            'color': data['color'],
+            'size': data['size'],
+            'opacity': 0.7,
+            'colorscale': 'Viridis',
+            'reversescale': True,
+            'colorbar': {'title': 'Number of Students'}
+        },
+    }
 
-    # Render the template with the map
-    return render_template('map.html', map_html=map_html)
+    layout = {'title': 'UNESCO Schools Map'}
+
+    # Render the template with the map and dropdown menu
+    return render_template('schools_map.html', map_data=map_data, layout=layout, dropdown_menu=request.args.get('dropdown_menu'))
+
 
 
 if __name__ == '__main__':
