@@ -1,6 +1,6 @@
 # Learning_Dashboard
 
-#Current data is fake to protect student information. It was generated using ChatGPT hence the wrong age calculations.
+# Current data is fake to protect student information. It was generated using ChatGPT hence the wrong age calculations.
 
 ## Student Dashboard
 This is a Dash web application that displays a bar graph of student GPAs and a dropdown menu of student names. Users can select a student from the dropdown menu to view thedemographics.
