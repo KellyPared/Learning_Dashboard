@@ -17,7 +17,8 @@ pip install -r requirements.txt
 To start the server, run the following command:
 python app.py
 
-This will start the server. You can access the application by navigating to http given after you run the app. Copy linke into your web browser.
+This will start the server. You can access the application by Visiting http://127.0.0.1:8050/ in your web browser. 
+
 
 ### Technologies Used
 This project uses the following technologies:
